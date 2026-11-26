@@ -17,3 +17,4 @@ MonoBehaviour:
   attackRange: 1.8
   cooldown: 0.6
   isRanged: 0
+  heldPrefab: {fileID: 3641590014594788794, guid: b8bce0901d53f754fa649a2accbfe0a7, type: 3}
