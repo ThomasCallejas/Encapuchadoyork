@@ -41,6 +41,32 @@ public class PlayerAttack : MonoBehaviour
     {
         ToolData tool = (toolHolder != null) ? toolHolder.currentTool : null;
 
+        // Comprobar si es un arma de ataque a distancia
+        if (tool != null && tool.isRanged)
+        {
+            if (tool.projectilePrefab == null)
+            {
+                Debug.LogWarning($"La herramienta '{tool.toolName}' es a distancia pero no tiene asignado un projectilePrefab.");
+                return;
+            }
+
+            nextAttackTime = Time.time + tool.cooldown;
+            Debug.Log($"Disparo con {tool.toolName}, daño {tool.damage}");
+
+            // Instanciar a 1 metro delante y 1 metro de altura respecto al jugador con su rotación
+            Vector3 spawnPosition = transform.position + transform.forward * 1f + Vector3.up * 1f;
+            GameObject spawnedProjectile = Instantiate(tool.projectilePrefab, spawnPosition, transform.rotation);
+
+            Projectile projectileScript = spawnedProjectile.GetComponent<Projectile>();
+            if (projectileScript != null)
+            {
+                projectileScript.Setup(tool.damage, tool.projectileSpeed);
+            }
+
+            return;
+        }
+
+        // Ataque cuerpo a cuerpo (herramienta melee o puños)
         float currentDamage = (tool != null) ? tool.damage : damage;
         float currentRange = (tool != null) ? tool.attackRange : attackRange;
         float currentCooldown = (tool != null) ? tool.cooldown : cooldown;
@@ -83,7 +109,7 @@ public class PlayerAttack : MonoBehaviour
 
         float currentRange = attackRange;
         PlayerToolHolder holder = (toolHolder != null) ? toolHolder : GetComponent<PlayerToolHolder>();
-        if (holder != null && holder.currentTool != null)
+        if (holder != null && holder.currentTool != null && !holder.currentTool.isRanged)
         {
             currentRange = holder.currentTool.attackRange;
         }

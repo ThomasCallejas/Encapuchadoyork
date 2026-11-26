@@ -13,4 +13,11 @@ public class ToolData : ScriptableObject
     [Header("Visuales")]
     [Tooltip("Prefab del modelo que se mostrará en la mano del jugador.")]
     public GameObject heldPrefab;
+
+    [Header("Ataque a Distancia")]
+    [Tooltip("Prefab del proyectil que disparará esta herramienta.")]
+    public GameObject projectilePrefab;
+
+    [Tooltip("Velocidad de avance del proyectil.")]
+    public float projectileSpeed = 15f;
 }
